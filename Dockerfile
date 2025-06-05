@@ -21,8 +21,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 6) Copy the rest of your application code into the image
 COPY . .
 
-# 7) Expose the port your app listens on
-EXPOSE 8000
+ # Expose port (default to 8000, but allow override)
+ EXPOSE ${PORT:-8000}
 
-# 8) Start the application using Gunicorn with Uvicorn workers
-CMD ["gunicorn", "-w", "3", "-k", "uvicorn.workers.UvicornWorker", "Server.main:app", "--bind", "0.0.0.0:8000"]
+ # Run the application, using PORT environment variable or default to 8000
+ CMD ["sh", "-c", "gunicorn -w 3 -k uvicorn.workers.UvicornWorker Server.main:app --bind 0.0.0.0:${PORT:-8000}"]
