@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchasing Base Unit</title>
+    <!-- Line 6: Update favicon URL to relative path -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <!-- Line 7: Update styles.css path to use /static/ -->
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="sticky top-0 z-50">
+        <div class="container py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <!-- Line 14: Update logo.png path to use /static/ -->
+                <img src="/static/logo.png" alt="Purchasing Base Unit Logo" style="height: 50px; width: 150px; padding: 0px; margin: 0px; object-fit: contain;">
+                <h1 class="font-bold">Purchasing Base Unit</h1>
+            </div>
+            <nav class="flex items-center space-x-4">
+                <a href="#home" id="home-link" class="transition-all duration-200">Home</a>
+                <a href="#about" id="about-link" class="transition-all duration-200">About</a>
+                <button id="theme-toggle" class="focus:outline-none">
+                    <svg id="theme-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path id="sun-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m-8-9H3m18 0h-1M5.64 5.64l.7-.7m11.32 11.32l-.7-.7M5.64 18.36l.7.7m11.32-11.32l-.7.7M12 7a5 5 0 100 10 5 5 0 000-10z"></path>
+                        <path id="moon-icon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"></path>
+                    </svg>
+                </button>
+                <button id="logout-button" class="hidden">Logout</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- About Popup -->
+    <div id="about-popup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center hidden z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl max-w-md w-full">
+            <h2 class="text-2xl font-bold mb-4">About Purchasing Base Unit</h2>
+            <p class="mb-2 text-gray-700 dark:text-gray-300"><strong>Company:</strong> ESSI Security and Defence (<a href="https://essi.co.in" target="_blank" class="text-coral-500 hover:underline">essi.co.in</a>)</p>
+            <p class="mb-2 text-gray-700 dark:text-gray-300"><strong>Introduction:</strong> The Purchasing Base Unit is a powerful tool developed by ESSI Security and Defence to streamline product management and procurement processes. It enables users to efficiently search, add, and manage product datasheets, leveraging advanced semantic search technology.</p>
+            <p class="mb-6 text-gray-700 dark:text-gray-300"><strong>Uses:</strong></p>
+            <ul class="list-disc list-inside mb-6 text-gray-700 dark:text-gray-300">
+                <li>Semantic search for products based on requirements.</li>
+                <li>Add and manage product details in a centralized database.</li>
+                <li>Upload and process datasheets for easy access.</li>
+                <li>Secure access with user authentication.</li>
+            </ul>
+            <button id="close-popup" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-all duration-200">Close</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <div class="container py-8">
+            <!-- Login Section -->
+            <section id="login-section" class="max-w-md mx-auto">
+                <div class="card p-8">
+                    <h2 class="text-2xl font-semibold mb-6">Login to Your Account</h2>
+                    <div class="space-y-4">
+                        <input id="username" type="text" placeholder="Username" class="w-full" required>
+                        <input id="password" type="password" placeholder="Password" class="w-full" required>
+                        <button id="login-button" class="w-full">Login</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Content Section -->
+            <section id="main-content" class="hidden space-y-8">
+                <!-- Search Products -->
+                <div class="card">
+                    <h2 class="text-2xl font-semibold mb-6">Search Products</h2>
+                    <div class="space-y-6">
+                        <textarea id="requirements-text" placeholder="Enter requirements (e.g., PowerEdge R760xa)" class="w-full h-32 resize-none" required></textarea>
+                        <div class="filter-group">
+                            <input id="filter-company" type="text" placeholder="Filter by Company">
+                            <input id="filter-type" type="text" placeholder="Filter by Product Type">
+                            <input id="filter-score" type="number" placeholder="Min Match Score (%)" min="0" max="100">
+                        </div>
+                        <button id="search-button" class="w-full flex items-center justify-center space-x-2">
+                            <span id="search-text">Search</span>
+                            <svg id="search-spinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <table id="products-table" class="mt-6">
+                        <thead>
+                            <tr>
+                                <th class="p-4 text-left">Company</th>
+                                <th class="p-4 text-left">Name</th>
+                                <th class="p-4 text-left">Product Type</th>
+                                <th class="p-4 text-left">Match Score</th>
+                                <th class="p-4 text-left">Directory</th>
+                                <th class="p-4 text-left">Datasheet Path</th>
+                                <th class="p-4 text-left">Specs</th>
+                                <th class="p-4 text-left">Datasheet</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div id="pagination" class="flex justify-center space-x-2 mt-6"></div>
+                </div>
+
+                <!-- Add New Product -->
+                <div class="card">
+                    <h2 class="text-2xl font-semibold mb-6">Add New Product</h2>
+                    <div id="product-form" class="space-y-4">
+                        <input id="company-name" type="text" placeholder="Company Name" class="w-full" required>
+                        <input id="product-name" type="text" placeholder="Product Name" class="w-full" required>
+                        <input id="product-type" type="text" placeholder="Product Type" class="w-full" required>
+                        <input id="datasheet-path" type="text" placeholder="Datasheet Path (optional)" class="w-full">
+                        <textarea id="specs" placeholder="Specifications" class="w-full h-32 resize-none" required></textarea>
+                        <button id="save-button" type="button" class="w-full">Save Product</button>
+                    </div>
+                </div>
+
+                <!-- Upload Datasheet -->
+                <div class="card">
+                    <h2 class="text-2xl font-semibold mb-6">Upload Datasheet</h2>
+                    <div class="space-y-4">
+                        <input id="datasheet-upload" type="file" accept=".pdf" class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-coral-500 file:text-white hover:file:bg-coral-600 transition-all duration-200">
+                        <button id="upload-button" class="w-full">Upload Datasheet</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-6 text-center">
+        <div class="container">
+            <p class="text-sm">© 2025 Purchasing Base Unit. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Line 192: Update bundle.js path to use /static/ -->
+    <script src="/static/dist/bundle.js"></script>
+</body>
+</html>
