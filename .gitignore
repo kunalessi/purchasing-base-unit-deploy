@@ -1,1 +1,20 @@
 node_modules
+# Virtual environment
+venv/
+
+# SQLite database
+Server/database.sqlite
+
+# FAISS index files (also potentially large)
+Server/faiss_index/
+
+# Logs
+Server/logs/
+
+# Other generated or temporary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.log
