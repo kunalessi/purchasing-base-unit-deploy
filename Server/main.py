@@ -77,7 +77,7 @@ async def serve_frontend():
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://your-app-name.herokuapp.com",  # Replace with your Heroku app URL
+        "https://purchasing-base-unit-deploy.onrender.com",  # Placeholder
         "http://localhost:8080",
         "http://127.0.0.1:8080",
         "http://192.168.1.117:8080",
