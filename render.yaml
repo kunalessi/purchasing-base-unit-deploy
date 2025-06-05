@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: purchasing-base-unit            # anything you like
+    env: docker                           # tells Render to use the Dockerfile
+    plan: free                            # or starter/standard
+    autoDeploy: true
+    # leave buildCommand / startCommand blank – Dockerfile handles them
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: SECRET_KEY
+        value: e076b3ebc22000ea628b8526b552e7dd838c757d6e46d27978920eebd383431b
