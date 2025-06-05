@@ -1,11 +1,10 @@
-node_modules
 # Virtual environment
 venv/
 
 # SQLite database
 Server/database.sqlite
 
-# FAISS index files (also potentially large)
+# FAISS index files
 Server/faiss_index/
 
 # Logs
