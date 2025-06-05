@@ -73,6 +73,12 @@ async def serve_frontend():
     return FileResponse(str(client_dir / "index.html"))
 
 
+# Add health check endpoint
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
+
+
 # CORS settings with placeholder for Heroku app URL
 app.add_middleware(
     CORSMiddleware,
